@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:property-placeholder location="classpath:aplication.properties"/>
+
+    <bean name="databaseConnection" class="by.davlar.spring.database.DatabaseConnection">
+        <constructor-arg name="url" value="${db.url}"/>
+        <constructor-arg name="username" value="${db.username}"/>
+        <constructor-arg name="password" value="${db.password}"/>
+    </bean>
+
+    <bean name="userRepository" class="by.davlar.spring.database.repository.UserRepository">
+        <constructor-arg name="connection" ref="databaseConnection"/>
+    </bean>
+
+    <bean name="companyRepository" class="by.davlar.spring.database.repository.CompanyRepository">
+        <constructor-arg name="connection" ref="databaseConnection"/>
+    </bean>
+
+    <bean name="userService" class="by.davlar.spring.service.UserService">
+        <constructor-arg name="repository" ref="userRepository"/>
+    </bean>
+
+    <bean name="companyService" class="by.davlar.spring.service.CompanyService">
+        <constructor-arg name="repository" ref="companyRepository"/>
+    </bean>
+
+</beans>
