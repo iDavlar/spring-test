@@ -3,6 +3,8 @@ package by.davlar.spring.service;
 import by.davlar.spring.database.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.stereotype.Service;
+
 
 @ToString
 @RequiredArgsConstructor
