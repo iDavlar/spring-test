@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.stereotype.Component;
+
 
 @ToString
 @RequiredArgsConstructor

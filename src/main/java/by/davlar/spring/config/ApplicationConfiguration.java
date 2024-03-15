@@ -6,6 +6,7 @@ import by.davlar.spring.database.repository.UserRepository;
 import by.davlar.spring.service.CompanyService;
 import by.davlar.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 
@@ -43,12 +44,12 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public CompanyService companyService() {
-        return new CompanyService(companyRepository());
+    public CompanyService companyService(ApplicationEventPublisher applicationEventPublisher) {
+        return new CompanyService(companyRepository(), applicationEventPublisher);
     }
 
     @Bean
-    public UserService userService() {
-        return new UserService(userRepository());
+    public UserService userService(ApplicationEventPublisher applicationEventPublisher) {
+        return new UserService(userRepository(), applicationEventPublisher);
     }
 }
