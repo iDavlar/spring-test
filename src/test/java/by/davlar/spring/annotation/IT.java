@@ -1,0 +1,21 @@
+package by.davlar.spring.annotation;
+
+
+import by.davlar.spring.config.ApplicationConfiguration;
+import by.davlar.spring.integration.TestApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestConstructor;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@ActiveProfiles("test")
+@SpringBootTest(classes = {ApplicationConfiguration.class, TestApplicationConfiguration.class})
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+public @interface IT {
+}
