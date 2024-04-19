@@ -1,0 +1,7 @@
+db:
+  username: test
+  password: root
+debug: true
+spring:
+  main:
+    allow-bean-definition-overriding: false

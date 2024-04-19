@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
 
 @Configuration
 @ComponentScan("by.davlar.spring")
-@PropertySource("classpath:aplication.properties")
+@PropertySource("classpath:application.properties")
 @Import(
         {
                 ProdApplicationConfiguration.class,
@@ -34,22 +34,12 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public CompanyRepository companyRepository() {
-        return new CompanyRepository(databaseConnection());
+    public CompanyService companyService(CompanyRepository companyRepository, ApplicationEventPublisher applicationEventPublisher) {
+        return new CompanyService(companyRepository, applicationEventPublisher);
     }
 
     @Bean
-    public UserRepository userRepository() {
-        return new UserRepository(databaseConnection());
-    }
-
-    @Bean
-    public CompanyService companyService(ApplicationEventPublisher applicationEventPublisher) {
-        return new CompanyService(companyRepository(), applicationEventPublisher);
-    }
-
-    @Bean
-    public UserService userService(ApplicationEventPublisher applicationEventPublisher) {
-        return new UserService(userRepository(), applicationEventPublisher);
+    public UserService userService(UserRepository userRepository, ApplicationEventPublisher applicationEventPublisher) {
+        return new UserService(userRepository, applicationEventPublisher);
     }
 }
