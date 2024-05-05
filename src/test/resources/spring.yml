@@ -1,0 +1,3 @@
+spring:
+  test:
+    constructor.autowire.mode: all

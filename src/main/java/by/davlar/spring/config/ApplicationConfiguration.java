@@ -33,13 +33,4 @@ public class ApplicationConfiguration {
         );
     }
 
-    @Bean
-    public CompanyService companyService(CompanyRepository companyRepository, ApplicationEventPublisher applicationEventPublisher) {
-        return new CompanyService(companyRepository, applicationEventPublisher);
-    }
-
-    @Bean
-    public UserService userService(UserRepository userRepository, ApplicationEventPublisher applicationEventPublisher) {
-        return new UserService(userRepository, applicationEventPublisher);
-    }
 }

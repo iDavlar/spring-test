@@ -1,11 +1,12 @@
 package by.davlar.spring.annotation;
 
 
-import by.davlar.spring.config.ApplicationConfiguration;
+import by.davlar.ApplicationRunner;
 import by.davlar.spring.integration.TestApplicationConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,7 +16,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @ActiveProfiles("test")
-@SpringBootTest(classes = {ApplicationConfiguration.class, TestApplicationConfiguration.class})
+@SpringBootTest(classes = {ApplicationRunner.class, TestApplicationConfiguration.class})
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@Transactional
 public @interface IT {
 }

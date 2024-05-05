@@ -1,13 +1,16 @@
 package by.davlar.spring.database.repository;
 
-import by.davlar.spring.database.DatabaseConnection;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-import org.springframework.stereotype.Repository;
+import by.davlar.spring.database.entity.Company;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-@Repository
-@RequiredArgsConstructor
-@ToString
-public class CompanyRepository {
-    private final DatabaseConnection connection;
+import java.util.Optional;
+
+public interface CompanyRepository extends JpaRepository<Company, Integer> {
+
+    @Query("select c from Company c " +
+           "join fetch c.locales cl " +
+           "where c.name = :name2")
+    Optional<Company> findByName(@Param("name2") String name);
 }

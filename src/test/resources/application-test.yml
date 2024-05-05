@@ -5,3 +5,6 @@ debug: true
 spring:
   main:
     allow-bean-definition-overriding: false
+logging:
+  level:
+    org.springframework: DEBUG

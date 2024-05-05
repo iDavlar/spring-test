@@ -1,14 +1,16 @@
 package by.davlar.spring.database.repository;
 
-import by.davlar.spring.database.DatabaseConnection;
-import by.davlar.spring.database.entity.UserEntity;
-import lombok.ToString;
-import org.springframework.stereotype.Repository;
+import by.davlar.spring.database.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-@ToString
-public class UserRepository extends BaseRepository<UserEntity> {
-    public UserRepository(DatabaseConnection connection) {
-        super(connection);
-    }
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    //    @Query("select c from Company c " +
+//           "join fetch c.locales cl " +
+//           "where c.name = :name2")
+    Optional<User> findByUsername(String username);
+
+
 }

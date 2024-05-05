@@ -1,21 +1,11 @@
 package by.davlar.spring.integration;
 
-import by.davlar.spring.database.repository.UserRepository;
-import by.davlar.spring.service.UserService;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @TestConfiguration
+//@EnableJpaRepositories()
 public class TestApplicationConfiguration {
 
-//    @SpyBean
-//    private DatabaseConnection databaseConnection;
-//    @SpyBean
-//    private CompanyRepository companyRepository;
-//    @SpyBean
-//    private UserRepository userRepository;
-//    @SpyBean
-//    private CompanyService companyService;
-    @SpyBean
-    private UserRepository userRepository;
+
 }

@@ -1,44 +1,57 @@
 package by.davlar.spring.integration.service;
 
 import by.davlar.spring.annotation.IT;
-import by.davlar.spring.database.entity.UserEntity;
+import by.davlar.spring.config.ApplicationConfiguration;
+import by.davlar.spring.database.entity.Company;
+import by.davlar.spring.database.entity.Role;
+import by.davlar.spring.database.entity.User;
+import by.davlar.spring.database.repository.CompanyRepository;
 import by.davlar.spring.database.repository.UserRepository;
+import by.davlar.spring.service.CompanyService;
 import by.davlar.spring.service.UserService;
+import by.davlar.spring.service.dto.CompanyDto;
+import by.davlar.spring.service.dto.RoleDto;
 import by.davlar.spring.service.dto.UserDto;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 
 @IT
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @RequiredArgsConstructor
 public class UserServiceIT {
 
     private final UserService userService;
-    private final UserRepository userRepository;
+    private final CompanyService companyService;
 
     @Test
-    void registration() {
-        UserEntity user = new UserEntity(1, "Test");
-        doReturn(Optional.of(user)).when(userRepository).save(any());
+    void newUserRegistration_NoThrow() {
+        CompanyDto google = companyService.findByName("Google").orElseThrow();
 
-        UserDto userDto = new UserDto(2, "Test2");
+        UserDto userDto = UserDto.builder()
+                .username("Test")
+                .firstname("test")
+                .lastname("test")
+                .birthDate(LocalDate.now())
+                .role(RoleDto.USER)
+                .company(google)
+                .build();
         Optional<UserDto> result = userService.save(userDto);
         assertTrue(result.isPresent());
 
-        UserDto userDtoResult = result.orElseThrow();
+        Optional<UserDto> test = userService.findByUsername("Test");
+        assertTrue(test.isPresent());
 
-        assertEquals(userDtoResult.getName(), user.getName());
-        assertEquals(userDtoResult.getId(), user.getId());
+        assertEquals(result, test);
 
     }
 }
