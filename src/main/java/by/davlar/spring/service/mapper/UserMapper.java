@@ -10,7 +10,7 @@ public class UserMapper {
                 .username(dto.getUsername())
                 .firstname(dto.getFirstname())
                 .lastname(dto.getLastname())
-                .birthDate(dto.getBirthDate())
+                .birthdate(dto.getBirthDate())
                 .role(RoleMapper.RoleDtoToRole(dto.getRole()))
                 .company(CompanyMapper.CompanyDtoToCompany(dto.getCompany()))
                 .build();
@@ -22,7 +22,7 @@ public class UserMapper {
                 .username(entity.getUsername())
                 .firstname(entity.getFirstname())
                 .lastname(entity.getLastname())
-                .birthDate(entity.getBirthDate())
+                .birthDate(entity.getBirthdate())
                 .role(RoleMapper.RoleToRoleDto(entity.getRole()))
                 .company(CompanyMapper.CompanyToCompanyDto(entity.getCompany()))
                 .build();

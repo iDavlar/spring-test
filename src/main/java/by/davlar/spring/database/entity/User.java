@@ -26,8 +26,8 @@ public class User implements BaseEntity<Long> {
     private String firstname;
     @Column(nullable = false)
     private String lastname;
-    @Column(nullable = false)
-    private LocalDate birthDate;
+    @Column(nullable = false, name = "birth_date")
+    private LocalDate birthdate;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
