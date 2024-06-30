@@ -1,10 +1,15 @@
 package by.davlar.spring.service;
 
+import by.davlar.spring.database.entity.User;
 import by.davlar.spring.database.repository.UserRepository;
 import by.davlar.spring.listener.AccessType;
 import by.davlar.spring.listener.DatabaseEvent;
+import by.davlar.spring.service.dto.UserCreateEditDto;
 import by.davlar.spring.service.dto.UserDto;
+import by.davlar.spring.service.dto.UserReadDto;
+import by.davlar.spring.service.mapper.UserCreateEditMapper;
 import by.davlar.spring.service.mapper.UserMapper;
+import by.davlar.spring.service.mapper.UserReadMapper;
 import by.davlar.spring.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -12,34 +17,72 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @ToString
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final UserReadMapper userReadMapper;
+    private final UserCreateEditMapper userCreateEditMapper;
 
-    public Optional<UserDto> findById(Long id) {
+    public Optional<UserReadDto> findById(Long id) {
         this.applicationEventPublisher.publishEvent(
                 new DatabaseEvent(this, AccessType.READ, o -> true)
         );
 
         return userRepository.findById(id)
-                .map(UserMapper::UserToUserDto);
+                .map(userReadMapper::map);
     }
 
-    public Optional<UserDto> findByUsername(String username) {
+    public Optional<UserReadDto> findByUsername(String username) {
         this.applicationEventPublisher.publishEvent(
                 new DatabaseEvent(this, AccessType.READ, o -> true)
         );
 
         return userRepository.findByUsername(username)
-                .map(UserMapper::UserToUserDto);
+                .map(userReadMapper::map);
     }
 
+    @Transactional
+    public UserReadDto create(UserCreateEditDto userDto) {
+        return Optional.of(userDto)
+                .map(userCreateEditMapper::map)
+                .map(userRepository::saveAndFlush)
+                .map(userReadMapper::map)
+                .orElseThrow();
+    }
+
+    @Transactional
+    public boolean delete(Long id) {
+        return userRepository.findById(id)
+                .map(entity -> {
+                    userRepository.delete(entity);
+                    userRepository.flush();
+                    return true;
+                })
+                .orElse(false);
+    }
+
+    public List<UserReadDto> findAll(){
+        return userRepository.findAll().stream()
+                .map(userReadMapper::map)
+                .toList();
+    }
+
+    @Transactional
+    public UserReadDto update(Long id, UserCreateEditDto userCreateEditDto) {
+        return userRepository.findById(id)
+                .map(entity -> userCreateEditMapper.map(userCreateEditDto, entity))
+                .map(userRepository::saveAndFlush)
+                .map(userReadMapper::map)
+                .orElseThrow();
+    }
+    @Transactional
     public Optional<UserDto> save(UserDto dto) {
         this.applicationEventPublisher.publishEvent(
                 new DatabaseEvent(this, AccessType.CREATE, o -> false)
