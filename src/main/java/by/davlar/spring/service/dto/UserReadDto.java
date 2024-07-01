@@ -18,4 +18,16 @@ public class UserReadDto {
     LocalDate birthdate;
     Role role;
     CompanyDto company;
+
+    public static UserReadDto newEmptyObject() {
+        return UserReadDto.builder()
+                .id(null)
+                .username(null)
+                .firstname(null)
+                .lastname(null)
+                .birthdate(LocalDate.now())
+                .role(null)
+                .company(null)
+                .build();
+    }
 }

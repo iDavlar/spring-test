@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @AllArgsConstructor
-@Data
+@Value
 @Builder
-@NoArgsConstructor
 public class CompanyDto {
 
     private Integer id;
