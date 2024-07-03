@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -91,9 +93,12 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute UserCreateEditDto userCreateEditDto, RedirectAttributes redirectAttributes) {
-        if (true) {
+    public String create(@ModelAttribute @Validated UserCreateEditDto userCreateEditDto,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("user", userCreateEditDto);
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/users/registration";
         }
         var userReadDto = userService.create(userCreateEditDto);
@@ -101,7 +106,8 @@ public class UserController {
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable("id") Long id, @ModelAttribute UserCreateEditDto userCreateEditDto) {
+    public String update(@PathVariable("id") Long id,
+                         @ModelAttribute @Validated UserCreateEditDto userCreateEditDto) {
         var userReadDto = userService.update(id, userCreateEditDto);
         return "redirect:/users/" + userReadDto.getId();
     }
