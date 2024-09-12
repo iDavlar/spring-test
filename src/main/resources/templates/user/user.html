@@ -18,6 +18,7 @@
     <label for="firstname">Firstname:
         <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
     </label><br>
+
     <div th:each="role : ${roles}">
         <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
         <label th:for="${role}" th:text="${role}">Role name</label>
@@ -34,6 +35,30 @@
     </div>
     <button type="submit">Update</button>
 </form>
+
+<div th:each="imageDto: ${@imageService.findAllByUserId(user.id)}">
+    <form th:action="@{/api/v2/images/{id}/update(id=${imageDto.id})}" method="post" enctype="multipart/form-data" th:object="${imageDto}">
+        <div th:if="*{value}">
+            <img th:src="@{/api/v2/images/{id}/file(id=${imageDto.id})}" alt="Image">
+        </div><br>
+        <label for="value">Image:
+            <input id="value" type="file" name="value">
+        </label>
+        <button type="submit">Update image</button>
+    </form>
+    <form th:action="@{/api/v2/images/{id}/delete(id=${imageDto.id})}" method="post">
+        <button type="submit">Delete</button>
+    </form>
+</div>
+<form th:action="@{/api/v2/images/}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="userId" th:value="${user.id}">
+    <label for="addValue">Image:
+        <input id="addValue" type="file" name="value">
+    </label>
+    <button type="submit">Add picture</button>
+</form>
+<br>
+
 <form th:action="@{/users/{userId}/delete(userId=${user.id})}" th:if="${user.role.name() == 'ADMIN'}" method="post">
     <button type="submit">Remove</button>
 </form>

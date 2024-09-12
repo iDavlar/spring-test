@@ -7,5 +7,4 @@ public interface Mapper<F, T> {
         return toObject;
     }
 
-    ;
 }
