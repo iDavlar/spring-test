@@ -32,9 +32,10 @@ public class UserServiceIT {
 
         UserDto userDto = UserDto.builder()
                 .username("Test")
+                .password("123")
                 .firstname("test")
                 .lastname("test")
-                .birthDate(LocalDate.now())
+                .birthdate(LocalDate.now())
                 .role(RoleDto.USER)
                 .company(google)
                 .build();
@@ -44,7 +45,15 @@ public class UserServiceIT {
         Optional<UserReadDto> test = userService.findByUsername("Test");
         assertTrue(test.isPresent());
 
-        assertEquals(result, test);
+        assertEquals(result.get().getId(), test.get().getId());
+        assertEquals(result.get().getUsername(), test.get().getUsername());
+        assertEquals(result.get().getPassword(), test.get().getPassword());
+        assertEquals(result.get().getFirstname(), test.get().getFirstname());
+        assertEquals(result.get().getLastname(), test.get().getLastname());
+        assertEquals(result.get().getRole().name(), test.get().getRole().name());
+        assertEquals(result.get().getCompany(), test.get().getCompany());
+        assertEquals(result.get().getBirthdate(), test.get().getBirthdate());
+
 
     }
 

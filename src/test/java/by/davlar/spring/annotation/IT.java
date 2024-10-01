@@ -4,6 +4,7 @@ package by.davlar.spring.annotation;
 import by.davlar.ApplicationRunner;
 import by.davlar.spring.integration.TestApplicationConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,5 +20,6 @@ import java.lang.annotation.Target;
 @SpringBootTest(classes = {ApplicationRunner.class, TestApplicationConfiguration.class})
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @Transactional
+@WithMockUser(username = "test", password = "123", authorities = {"ADMIN"})
 public @interface IT {
 }

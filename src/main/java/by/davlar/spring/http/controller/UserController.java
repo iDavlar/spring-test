@@ -8,6 +8,7 @@ import by.davlar.spring.service.dto.UserReadDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,14 +28,11 @@ public class UserController {
 
     @GetMapping
     public String findAll(HttpSession session, Model model) {
-        return Optional.ofNullable(session.getAttribute("user"))
-                .map(value -> {
-                    model.addAttribute("users", userService.findAll());
-                    return "user/users";
-                })
-                .orElse("redirect:/users/login");
+        model.addAttribute("users", userService.findAll());
+        return "user/users";
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'OPERATOR') || #id.equals(authentication.principal.id)")
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Long id, Model model) {
         return userService.findById(id)
@@ -49,47 +47,16 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(HttpSession session) {
-        return Optional.ofNullable(session.getAttribute("user"))
-                .map(value -> {
-                    return "redirect:/users/" + ((UserReadDto) value).getId();
-                })
-                .orElse("user/login");
+        return "user/login";
     }
 
-    @PostMapping("/login")
-    public String loginPost(HttpSession session,
-                            RedirectAttributes redirectAttributes,
-                            @RequestParam String username,
-                            @RequestParam String password) {
-        return userService.findByUsername(username)
-                .map(userReadDto -> {
-                    session.setAttribute("user", userReadDto);
-                    if (userReadDto.getRole().equals(Role.ADMIN)) {
-                        return "redirect:/users";
-                    }
-                    return "redirect:/users/" + userReadDto.getId();
-                })
-                .orElseGet(() -> {
-                    redirectAttributes.addFlashAttribute("username", username);
-                    redirectAttributes.addFlashAttribute("password", password);
-                    return "redirect:/users/login";
-                });
-
-    }
 
     @GetMapping("/registration")
     public String registration(HttpSession session, Model model) {
-        return Optional.ofNullable(session.getAttribute("user"))
-                .map(value -> {
-                    model.addAttribute("users", userService.findAll());
-                    return "redirect:/users/" + ((UserReadDto) value).getId();
-                })
-                .orElseGet(() -> {
-                    model.addAttribute("roles", Role.values());
-                    model.addAttribute("companies", companyService.findAll());
-                    model.addAttribute("user", UserCreateEditDto.newEmptyObject());
-                    return "user/registration";
-                });
+        model.addAttribute("roles", Role.values());
+        model.addAttribute("companies", companyService.findAll());
+        model.addAttribute("user", UserCreateEditDto.newEmptyObject());
+        return "user/registration";
     }
 
     @PostMapping
@@ -105,6 +72,7 @@ public class UserController {
         return "redirect:/users/" + userReadDto.getId();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'OPERATOR') || #id.equals(authentication.principal.id)")
     @PostMapping("/{id}/update")
     public String update(@PathVariable("id") Long id,
                          @ModelAttribute @Validated UserCreateEditDto userCreateEditDto) {
@@ -112,6 +80,7 @@ public class UserController {
         return "redirect:/users/" + userReadDto.getId();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN') || #id.equals(authentication.principal.id)")
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long id) {
         userService.delete(id);

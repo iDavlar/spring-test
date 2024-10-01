@@ -8,9 +8,10 @@ public class UserMapper {
         return User.builder()
                 .id(dto.getId())
                 .username(dto.getUsername())
+                .password(dto.getPassword())
                 .firstname(dto.getFirstname())
                 .lastname(dto.getLastname())
-                .birthdate(dto.getBirthDate())
+                .birthdate(dto.getBirthdate())
                 .role(RoleMapper.RoleDtoToRole(dto.getRole()))
                 .company(CompanyMapper.CompanyDtoToCompany(dto.getCompany()))
                 .build();
@@ -20,9 +21,10 @@ public class UserMapper {
         return UserDto.builder()
                 .id(entity.getId())
                 .username(entity.getUsername())
+                .password(entity.getPassword())
                 .firstname(entity.getFirstname())
                 .lastname(entity.getLastname())
-                .birthDate(entity.getBirthdate())
+                .birthdate(entity.getBirthdate())
                 .role(RoleMapper.RoleToRoleDto(entity.getRole()))
                 .company(CompanyMapper.CompanyToCompanyDto(entity.getCompany()))
                 .build();

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class UserReadDto {
     Long id;
     String username;
+    String password;
     String firstname;
     String lastname;
     LocalDate birthdate;
@@ -23,6 +24,7 @@ public class UserReadDto {
         return UserReadDto.builder()
                 .id(null)
                 .username(null)
+                .password(null)
                 .firstname(null)
                 .lastname(null)
                 .birthdate(LocalDate.now())

@@ -20,6 +20,7 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User> {
         toObject.setFirstname(fromObject.getFirstname());
         toObject.setLastname(fromObject.getLastname());
         toObject.setUsername(fromObject.getUsername());
+        toObject.setPassword(fromObject.getPassword());
         toObject.setBirthdate(fromObject.getBirthdate());
         toObject.setRole(fromObject.getRole());
         toObject.setCompany(getCompany(fromObject.getCompanyId()));
@@ -32,6 +33,7 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User> {
                 .firstname(object.getFirstname())
                 .lastname(object.getLastname())
                 .username(object.getUsername())
+                .password(object.getPassword())
                 .role(object.getRole())
                 .birthdate(object.getBirthdate())
                 .company(getCompany(object.getCompanyId()))

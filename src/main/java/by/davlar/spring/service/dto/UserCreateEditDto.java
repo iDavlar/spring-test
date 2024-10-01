@@ -17,6 +17,8 @@ public class UserCreateEditDto {
     @Email
     String username;
     @NotBlank
+    String password;
+    @NotBlank
     String firstname;
     @NotBlank
     String lastname;
@@ -28,6 +30,7 @@ public class UserCreateEditDto {
     public static UserCreateEditDto newEmptyObject() {
         return UserCreateEditDto.builder()
                 .username(null)
+                .password(null)
                 .firstname(null)
                 .lastname(null)
                 .birthdate(LocalDate.now())

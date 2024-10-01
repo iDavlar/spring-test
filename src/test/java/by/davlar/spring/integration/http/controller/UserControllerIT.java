@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static by.davlar.spring.service.dto.UserCreateEditDto.Fields.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -33,33 +35,38 @@ public class UserControllerIT {
         mockMvc.perform(get("/users/1").param("id", "1"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("user/user"))
-                .andExpect(model().attributeExists("users"));
+                .andExpect(model().attributeExists("user"));
     }
 
     @Test
     void create() throws Exception {
         mockMvc.perform(post("/users")
                         .param(username, "test@gmail.com")
+                        .param(password, "123")
                         .param(firstname, "Test")
                         .param(lastname, "TestTest")
                         .param(role, "ADMIN")
                         .param(companyId, "1")
                         .param(birthdate, "2000-01-01")
+                        .with(csrf())
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
                         redirectedUrlPattern("/users/{\\d+}")
                 );
     }
+
     @Test
     void update() throws Exception {
         mockMvc.perform(post("/users/1/update")
                         .param(username, "test@gmail.com")
+                        .param(password, "123")
                         .param(firstname, "Test")
                         .param(lastname, "TestTest")
                         .param(role, "ADMIN")
                         .param(companyId, "1")
                         .param(birthdate, "2000-01-01")
+                        .with(csrf())
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),

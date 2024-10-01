@@ -22,6 +22,8 @@ public class User implements BaseEntity<Long> {
     private Long id;
     @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false, columnDefinition = "varchar(128) default '{noop}123'")
+    private String password;
     @Column(nullable = false)
     private String firstname;
     @Column(nullable = false)
